@@ -1,0 +1,63 @@
+
+.form {
+    margin-top: 50px;
+    padding: 20px;
+}
+
+label {
+    text-align: left !important;
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+input, textarea {
+    width: 100%; /* Full width */
+    padding: 12px; /* Some padding */
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 4px; /* Rounded borders */
+    box-sizing: border-box; /* Make sure that padding and width stays in place */
+    margin-top: 6px; /* Add a top margin */
+    margin-bottom: 16px; /* Bottom margin */
+    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+button {
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    /* letter-spacing: 2px; */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 70%;
+}
+
+#submit:hover {
+    background-color: red;
+}
+
+.alert {
+    background:red;
+    padding: 20px;
+    color: white;
+    font-size:18px;
+    font-weight:bold;
+    border-radius:20px;
+    text-align:center;
+
+}
+.success {
+    background: green;
+    padding: 20px;
+    color: white;
+    font-size:18px;
+    font-weight:bold;
+    border-radius:20px;
+    text-align:center;
+}
+
+#p1 h2 {
+    margin-top: 200px !important;
+}

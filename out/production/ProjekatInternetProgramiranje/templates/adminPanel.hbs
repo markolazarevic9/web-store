@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/486587c22a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://127.0.0.1:5000/css/style.css">
+    <title>Admin panel</title>
+
+    <style>
+        button a {
+            color: white;
+        }
+        button a:hover {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+
+    <h2>Admin panel</h2>
+
+    <select  id="kategorije">
+        <option  name="kategorija" value="0">---Izaberite kategoriju---</option>
+        {{#each kategorije}}
+            <option name="kategorija" value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    <button class="btn btn-dark text-white" onclick="izbrisiKategoriju()">Izbrisi kategoriju</button>
+    <button class="btn btn-dark text-white"><a href="/dodajKategoriju">Dodaj kategoriju</a></button>
+    <button class="btn btn-dark text-white"><a href="/dodaj">Dodaj novi proizvod</a></button>
+
+
+    <button class="btn btn-dark float-right"> <a href="/logout"><i class="fas fa-sign-out-alt"></i> LOG OUT</a></button>
+
+
+     <table class="table">
+          <thead>
+            <tr>
+               <th scope="col">ID</th>
+               <th scope="col">NAZIV</th>
+               <th scope="col">CENA</th>
+               <th scope="col">EKRAN:</th>
+               <th scope="col">PROCESOR:</th>
+               <th scope="col">MEMORIJA:</th>
+               <th scope="col">VIDLJIVOST</th>
+                <th scope="col">IZMENA</th>
+                <th scope="col">Brisanje</th>
+           </tr>
+           </thead>
+           <tbody id="table">
+               {{#each proizvodi}}
+                   <tr>
+                       <th scope="row">{{this.id}}</th>
+                       <th scope="row">{{this.name}}</th>
+                       <th scope="row">{{this.price}}</th>
+                       <th scope="row">{{this.screenSize}} {{this.screenResolution}}</th>
+                       <th scope="row">{{this.cpu}} {{this.numberOfCores}} jezgra</th>
+                       <th scope="row">{{this.memory}} {{this.ram}}</th>
+                       <th scope="row">Visible <input type="checkbox" onchange="vidljivost(this)" data-id="{{this.id}}" {{#if this.visible}}checked{{/if}}></th>
+                       <th scope="row"> <button class="btn-primary"><a  href="/izmeni/{{this.id}}">Izmeni</a></button></th>
+                       <th scope="row"><button class="btn-outline-danger" value="{{this.id}}" onclick="obrisi(this)" id="obrisi">Obrisi</button></th>
+                   </tr>
+               {{/each}}
+           </tbody>
+        </table>
+    <script src="http://127.0.0.1:5000/js/jquery-3.3.1.min.js"></script>
+    <script>
+        function prikazPodataka(lista) {
+            let tabela = document.querySelector("#table");
+            tabela.innerHTML="";
+                let html = "";
+            for (let proizvod of lista) {
+                html += `<tr>
+                <th scope="row">${proizvod.id}</th>
+                <td>${proizvod.name}</td>
+                <td>${proizvod.price}</td>
+                <td>${proizvod.screenSize} ${proizvod.screenResolution}</td>
+                <td>${proizvod.cpu} ${proizvod.numberOfCores} jezgra</td>
+                <td>${proizvod.memory} ${proizvod.ram}</td>
+                <td>Visible <input type="checkbox" data-id="${proizvod.id}"></td>
+                <td> <button class="btn-primary"><a href="/izmeni/${proizvod.id}">Izmeni</a></button></td>
+                <th scope="row"><button class="btn-outline-danger" value="${proizvod.id}" onclick="obrisi(this)" id="obrisi">Obrisi</button></th>
+                </tr>`
+            }
+            tabela.innerHTML = html;
+
+        }
+
+
+        // ako je intel cekiran -> u data njegovu vrednost
+        document.querySelector("#kategorije").onchange = function () {
+            let kategorije = document.querySelector("#kategorije");
+            $.ajax({
+                url: "/dohvatiProizvode",
+                method: "GET",
+                data: {
+                    "kategorija": kategorije.value
+                },
+                success: function (response) {
+                    let elementi = JSON.parse(response);
+                    prikazPodataka(elementi);
+                }
+            })
+        }
+
+        function obrisi(btn) {
+
+            if(confirm("Da li zelite da obrisete proizvod") == true) {
+                $.ajax({
+                    url:"/obrisi",
+                    method: "get",
+                    data: {
+                        "id": btn.value
+                    },
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
+                    }
+                })
+            }
+        }
+
+        function izbrisiKategoriju() {
+            let kategorije = document.querySelector("#kategorije");
+            $.ajax({
+                url: "/izbrisiKategoriju",
+                method: "GET",
+                data: {
+                    "kategorija": kategorije.value
+                },
+                success: function (response) {
+                    alert(response);
+                    location.reload();
+                }
+            })
+        }
+    </script>
+
+
+</body>
+</html>

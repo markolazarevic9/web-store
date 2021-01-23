@@ -1,0 +1,34 @@
+<component name="libraryTable">
+  <library name="antlr4-runtime-4.5.1-1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../sparklib/antlr4-runtime-4.5.1-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/commons-lang3-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/gson-2.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/guava-14.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/handlebars-4.0.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/handlebars-guava-cache-4.0.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/javax.servlet-api-3.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-client-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-http-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-io-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-security-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-server-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-servlet-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-util-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-webapp-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/jetty-xml-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/rhino-1.7R4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/slf4j-api-1.7.25.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/slf4j-simple-1.7.25.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/spark-core-2.8.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/spark-template-handlebars-2.7.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/websocket-api-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/websocket-client-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/websocket-common-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/websocket-server-9.4.12.v20180830.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sparklib/websocket-servlet-9.4.12.v20180830.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

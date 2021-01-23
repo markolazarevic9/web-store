@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="http://127.0.0.1:5000/css/dodaj.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Izmeni proizvod</title>
+</head>
+<body>
+    <h2>Izmeni proizvod</h2>
+    {{#if poruka}}
+        <div>{{poruka}}</div>
+    {{/if}}
+<form action="/izmeniProizvod" method="post" class="form">
+    <input type="hidden" value="{{proizvod.id}}" name="id">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Naziv proizvoda</label>
+        <input type="text" class="form-control" id="naziv" name="naziv" value="{{proizvod.name}}" placeholder="Unesite naziv proizvoda">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Cena proizvoda</label>
+        <input type="text" class="form-control" name="cena" id="cena" value="{{proizvod.price}}" placeholder="Unesite cenu proizvoda">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Ekran</label>
+        <input type="text" class="form-control" name="ekran" id="ekran" value="{{proizvod.screenSize}},{{proizovd.screenResolution}}"  placeholder="Unesite velicinu ekrana, pa zatim rezoluciju">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Procesor</label>
+        <input type="text" class="form-control" name="procesor" id="procesor" value="{{proizvod.cpu}},{{proizvod.numberOfCores}} jezgra"  placeholder="Unesite naziv procesora, pa broj jezgra">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Fotografija</label>
+        <input type="text" class="form-control" name="url" id="url" value="{{proizvod.image}}"  placeholder="Unesite url fotografije">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Memorija</label>
+        <input type="text" class="form-control" name="memorija" id="memorija" value="{{proizvod.memory}},{{proizvod.ram}}"  placeholder="Unesite prvo internu, pa ram memoriju">
+    </div>
+    <button type="submit" class="btn btn-outline-dark">Sačuvaj izmene</button>
+</form>
+</body>
+</html>

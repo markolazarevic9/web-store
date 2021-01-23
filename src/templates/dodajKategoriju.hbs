@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dodaj kategoriju</title>
+</head>
+<body>
+    {{#if poruka}}
+        <div>{{poruka}}</div>
+    {{/if}}
+    <h2>Dodaj kategoriju</h2>
+    <form action="/dodajKat" method="post">
+        <label for="naziv">Naziv Kategorije</label> <br>
+        <input placeholder="Unesite naziv kategorije" name="naziv" type="text"> <br>
+        <button>Kreiraj kategoriju</button>
+    </form>
+</body>
+</html>

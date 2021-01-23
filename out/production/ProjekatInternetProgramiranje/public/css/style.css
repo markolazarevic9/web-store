@@ -1,0 +1,31 @@
+.nav-link {
+    color: black;
+}
+.col-3 {
+    padding: 0;
+}
+.row {
+    margin-top: 70px;
+    margin-left: 20px;
+}
+.form-inline {
+    margin-right: 37px;
+    margin-top: 10px;
+
+
+}
+a {
+    color: black;
+    text-decoration: none;
+}
+.card-img-top {
+    max-width: 285px;
+    max-height: 214px;
+}
+#logo {
+    font-family: 'Press Start 2P', cursive;
+}
+.dropdown-menu {
+    text-align: center !important;
+}
+
