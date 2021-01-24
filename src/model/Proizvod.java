@@ -3,6 +3,7 @@ package model;
 
 
 public class Proizvod {
+
    private int id;
    private double price;
    private String name;
@@ -13,8 +14,15 @@ public class Proizvod {
    private String numberOfCores;
    private String memory;
    private String ram;
+   private Boolean visible;
 
+    public Boolean getVisible() {
+        return visible;
+    }
 
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
 
     public Proizvod(int id, double price, String name, String image, String screenSize, String cpu, String screenResolution, String numberOfCores, String memory, String ram) {
         this.id = id;
@@ -23,11 +31,11 @@ public class Proizvod {
         this.image = image;
         this.screenSize = screenSize;
         this.cpu = cpu;
-
         this.screenResolution = screenResolution;
         this.numberOfCores = numberOfCores;
         this.memory = memory;
         this.ram = ram;
+        this.visible = true;
     }
 
     public int getId() {
@@ -77,8 +85,6 @@ public class Proizvod {
     public void setCpu(String cpu) {
         this.cpu = cpu;
     }
-
-
 
     public String getScreenResolution() {
         return screenResolution;

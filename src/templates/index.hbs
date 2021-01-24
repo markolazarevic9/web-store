@@ -33,8 +33,8 @@
                     Filteri
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <label class="dropdown-item">Procesor intel <input  id="chk1" value="intel" type="checkbox"></label>
-                    <label class="dropdown-item">Procesor AMD <input id="ckh" value="amd" type="checkbox">   </label>
+                    <label class="dropdown-item">Procesor intel <input onchange="dodajFilter(this)"  id="chk1" value="filterIntel" type="checkbox"></label>
+                    <label class="dropdown-item">Procesor AMD <input onchange="dodajFilter(this)" class="filter" value="filterAmd" id="ckh" value="amd" type="checkbox">   </label>
                     <label class="dropdown-item">Graficka kartica <input id="chk" value="gpu" type="checkbox"></label>
                 </div>
             </li>
@@ -140,9 +140,12 @@
                 success: function (response) {
                     let elementi = JSON.parse(response);
                     prikazPodataka(elementi);
+                    console.log(elementi);
                 }
             })
-    }
+        }
+
+
 
 
 

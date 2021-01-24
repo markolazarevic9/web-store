@@ -22,7 +22,13 @@ public class Launcher {
 
         HashMap<String, Object> polja = new HashMap<>();
         get("/", (request, response) -> {
-            polja.put("proizvodi", Data.readFromJson(path));
+            ArrayList<Proizvod> proizvodi = new ArrayList<>();
+            for (Proizvod p : Data.readFromJson(path)) {
+                if(p.getVisible() == true) {
+                    proizvodi.add(p);
+                }
+            }
+            polja.put("proizvodi", proizvodi);
             return new ModelAndView(polja, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -97,33 +103,35 @@ public class Launcher {
             for (int i = 0; i < list.size() - 1; i++) {
                 for (int j = i + 1; j < list.size(); j++) {
                     // Switch -> case
-                    if (sortiranje.equals("1")) {
-                        if (list.get(i).getPrice() > list.get(j).getPrice()) {
-                            Proizvod tmp = list.get(i);
-                            list.set(i, list.get(j));
-                            list.set(j, tmp);
-                        }
-                    }
-                    if (sortiranje.equals("2")) {
-                        if (list.get(i).getPrice() < list.get(j).getPrice()) {
-                            Proizvod tmp = list.get(i);
-                            list.set(i, list.get(j));
-                            list.set(j, tmp);
-                        }
-                    }
-                    if (sortiranje.equals("3")) {
-                        if (list.get(i).getName().compareTo(list.get(j).getName()) > 0) {
-                            Proizvod tmp = list.get(i);
-                            list.set(i, list.get(j));
-                            list.set(j, tmp);
-                        }
-                    }
-                    if (sortiranje.equals("4")) {
-                        if (list.get(i).getName().compareTo(list.get(j).getName()) < 0) {
-                            Proizvod tmp = list.get(i);
-                            list.set(i, list.get(j));
-                            list.set(j, tmp);
-                        }
+                    switch (sortiranje) {
+                        case "1":
+                            if (list.get(i).getPrice() > list.get(j).getPrice()) {
+                                Proizvod tmp = list.get(i);
+                                list.set(i, list.get(j));
+                                list.set(j, tmp);
+                            }
+                             break;
+                        case "2":
+                            if (list.get(i).getPrice() < list.get(j).getPrice()) {
+                                Proizvod tmp = list.get(i);
+                                list.set(i, list.get(j));
+                                list.set(j, tmp);
+                            }
+                            break;
+                        case "3":
+                            if (list.get(i).getName().compareTo(list.get(j).getName()) > 0) {
+                                Proizvod tmp = list.get(i);
+                                list.set(i, list.get(j));
+                                list.set(j, tmp);
+                            }
+                            break;
+                        case "4":
+                            if (list.get(i).getName().compareTo(list.get(j).getName()) < 0) {
+                                Proizvod tmp = list.get(i);
+                                list.set(i, list.get(j));
+                                list.set(j, tmp);
+                            }
+                            break;
                     }
 
                 }
@@ -145,14 +153,13 @@ public class Launcher {
             if (lista.size() > 0) {
                 for (int i = 0; i < lista.size(); i++) {
                     if (lista.get(i).getName().equals(naziv)) {
-                            System.out.println("if 150" + lista.get(i).getName().equals(naziv));
                             provera = true;
                             break;
                     } else {
-                            System.out.println("else" + lista.get(i).getName().equals(naziv));
                             if (i == (lista.size() - 1)) {
                                     lista.add(p);
                                     provera = false;
+                                    break;
                             }
                     }
                 }
@@ -161,7 +168,7 @@ public class Launcher {
                 provera = false;
             }
 
-            if(provera == false){
+            if(!provera){
                 poruka = "Uspesno dodat proizvod";
             } else {
                 poruka = "Vec postoji proizvod";
@@ -170,20 +177,20 @@ public class Launcher {
             Data.writeToJSON(lista, path);
             return new ModelAndView(polja, "dodaj.hbs");
         }, new HandlebarsTemplateEngine());
-
-        get("/api/obrada", (request, response) -> {
-            response.type("text/text");
-            String filter = request.queryParams("value");
-            ArrayList<Proizvod> proizvodi = Data.readFromJson(path);
-            ArrayList<Proizvod> list = new ArrayList<>();
-            for (Proizvod p : proizvodi) {
-                if (p.getCpu().contains(filter)) {
-                    list.add(p);
-                }
-            }
-            Gson gson = new Gson();
-            return gson.toJson(list);
-        });
+//
+//        get("/api/obrada", (request, response) -> {
+//            response.type("text/text");
+//            String filter = request.queryParams("value");
+//            ArrayList<Proizvod> proizvodi = Data.readFromJson(path);
+//            ArrayList<Proizvod> list = new ArrayList<>();
+//            for (Proizvod p : proizvodi) {
+//                if (p.getCpu().contains(filter)) {
+//                    list.add(p);
+//                }
+//            }
+//            Gson gson = new Gson();
+//            return gson.toJson(list);
+//        });
 
         get("/dodaj", (request, response) -> {
             return new ModelAndView(null, "dodaj.hbs");
@@ -297,6 +304,23 @@ public class Launcher {
                 }
             }
             return poruka;
+        });
+
+        post("/promeniVidljivost",(request, response) -> {
+            response.type("text/text");
+            Boolean vidljivost = Boolean.parseBoolean(request.queryParams("visible"));
+            int id = Integer.parseInt(request.queryParams("id"));
+            ArrayList<Proizvod> proizvodi = Data.readFromJson(path);
+            System.out.println(vidljivost);
+            for (Proizvod p : proizvodi) {
+                if(p.getId() == id) {
+                    p.setVisible(vidljivost);
+                    System.out.println(vidljivost);
+                    break;
+                }
+            }
+            Data.writeToJSON(proizvodi,path);
+            return "Uspesno izmenjena vidjivost";
         });
 
 
