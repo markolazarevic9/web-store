@@ -50,7 +50,7 @@
             </li>
         </ul>
 
-        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> Korpa</a>
+        <a class="nav-link" href="/korpa"><i class="fas fa-shopping-cart"></i> Korpa</a>
         <a class="nav-link" href="/loginForm"><i class="fas fa-sign-in-alt"></i> Log in</a>
 
 
@@ -63,16 +63,16 @@
 
 <div class="row" id="prikaz">
     {{#each proizvodi}}
-        <div class="col-3">
+        <div class="col-3" style="width: 368px">
             <div class="card" style="width: 18rem;">
-                <img src="{{this.image}}" class="card-img-top" alt="Product image">
+                <img src="{{this.image}}"  class="card-img-top" alt="Product image">
                 <div class="card-body">
                     <h5 class="card-title">{{this.name}}</h5>
                     <p class="card-text"><strong> CENA {{this.price}}RSD</strong></p>
                     <button data-toggle="collapse" data-target="#collapse{{this.id}}" aria-expanded="false" aria-controls="collapse{{this.id}}"
                             class="btn btn-outline-dark">Detaljnije
                     </button>
-                    <button class="btn btn-outline-dark">Kupi</button>
+                    <button onclick="kupi({{this.id}})"  class="btn btn-outline-dark">Kupi</button>
                     <div class="collapse" id="collapse{{this.id}}">
                         <div class="card card-body">
                             <h6>Specifikacije</h6>
@@ -106,7 +106,7 @@
                     <button data-toggle="collapse" data-target="#collapse${proizvod.id}" aria-expanded="false" aria-controls="collapse${proizvod.id}"
                             class="btn btn-outline-dark">Detaljnije
                     </button>
-                    <button class="btn btn-outline-dark">Kupi</button>
+                     <button onclick="kupi(${proizvod.id})"  class="btn btn-outline-dark">Kupi</button>
                     <div class="collapse" id="collapse${proizvod.id}">
                         <div class="card card-body">
                             <h6>Specifikacije</h6>
@@ -144,14 +144,19 @@
                 }
             })
         }
-      
 
-
-
-
-
-
-
+        function kupi(id) {
+            $.ajax({
+                url:"/dodajKorpu",
+                method: "post",
+                data: {
+                    "id": id
+                },
+                success:function (response) {
+                    alert("Proizvod uspesno dodat u korpu");
+                }
+            })
+        }
 
 
 </script>

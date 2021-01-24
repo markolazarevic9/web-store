@@ -323,6 +323,36 @@ public class Launcher {
             return "Uspesno izmenjena vidjivost";
         });
 
+        ArrayList<Proizvod> korpa = new ArrayList<>();
+        post("/dodajKorpu",(request, response) -> {
+            int id = Integer.parseInt(request.queryParams("id"));
+            String poruka = "";
+            for (Proizvod p : Data.readFromJson(path)) {
+                if(p.getId() == id) {
+                    korpa.add(p);
+                    poruka = "Proizvod " + p.getName() + " uspesno dodat u korpu";
+                    break;
+                }
+            }
+            System.out.println(korpa);
+            return poruka;
+        });
+
+        get("/korpa", (request, response) -> {
+            polja.put("korpa",korpa);
+            return new ModelAndView(polja,"korpa.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/izbaciProizvod", (request, response) -> {
+            int id = Integer.parseInt(request.queryParams("id"));
+            for (int i = 0;i< korpa.size();i++) {
+                if(korpa.get(i).getId() == id) {
+                    korpa.remove(i);
+                }
+            }
+            return "Uspesno izbacen proizvod";
+        });
+
 
     }
 }
