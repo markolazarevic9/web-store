@@ -1,30 +1,30 @@
 package main;
 import com.google.gson.Gson;
-import model.Data;
-import model.Data2;
-import model.Kategorija;
-import model.Proizvod;
+import model.*;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import static java.lang.Double.parseDouble;
 import static spark.Spark.*;
-import static spark.Spark.staticFiles;
 
 public class Launcher {
     public static void main(String[] args) {
         staticFiles.location("/public");
         String path = "proizvodi.json";
         port(5000);
-
+        ArrayList<Proizvod> korpa = new ArrayList<>();
         HashMap<String, Object> polja = new HashMap<>();
+//        ArrayList<Proizvod> listaProizvoda = new ArrayList<>();
+//        for (Proizvod p : Data.readFromJson(path)) {
+//            if(p.getVisible()) {
+//               listaProizvoda.add(p);
+//            }
+//        }
+        // Prikaz proizvoda
         get("/", (request, response) -> {
             ArrayList<Proizvod> proizvodi = new ArrayList<>();
             for (Proizvod p : Data.readFromJson(path)) {
-                if(p.getVisible() == true) {
+                if(p.getVisible()) {
                     proizvodi.add(p);
                 }
             }
@@ -32,17 +32,23 @@ public class Launcher {
             return new ModelAndView(polja, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Pretraživanje
         get("/pretraga", (request, response) -> {
             String pretraga = request.queryParams("pretraga").toUpperCase();
-            ArrayList<Proizvod> proizvodi = Data.readFromJson(path);
-            polja.put("proizvodi", proizvodi.stream().filter(p -> p.getName().toUpperCase().contains(pretraga) || p.getCpu().toUpperCase().contains(pretraga)).toArray());
+            ArrayList<Proizvod> proizvodi = new ArrayList<>();
+            for (Proizvod p : Data.readFromJson(path)) {
+                if(p.getVisible()) {
+                    proizvodi.add(p);
+                }
+            }
+            polja.put("proizvodi", proizvodi.stream().filter(p -> p.getName().toUpperCase().contains(pretraga) || p.getCpu().toUpperCase().contains(pretraga) || p.getMemory().toUpperCase().contains(pretraga) || p.getRam().toUpperCase().contains(pretraga) || p.getScreenResolution().toUpperCase().contains(pretraga) || p.getScreenSize().toUpperCase().contains(pretraga)).toArray());
             return new ModelAndView(polja, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/loginForm", (request, response) -> {
-            return new ModelAndView(null, "login.hbs");
-        }, new HandlebarsTemplateEngine());
+        // Login forma učitavanje
+        get("/loginForm", (request, response) -> new ModelAndView(null, "login.hbs"), new HandlebarsTemplateEngine());
 
+        // Logovanje
         post("/login", (request, response) -> {
             String username = request.queryParams("username");
             String password = request.queryParams("password");
@@ -54,6 +60,7 @@ public class Launcher {
             return new ModelAndView(null, "login.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Učitavanje admin panela
         get("/adminPanel", (request, response) -> {
             if (request.session().attribute("user") == null) {
                 response.redirect("/");
@@ -65,13 +72,13 @@ public class Launcher {
                 if (!nazivKat.contains(k.getNaziv())) {
                     nazivKat.add(k.getNaziv());
                 }
-
             }
             polja.put("kategorije", nazivKat);
             polja.put("proizvodi", Data.readFromJson(path));
             return new ModelAndView(polja, "adminPanel.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Dohvatanje proizvoda po kategoriji
         get("/dohvatiProizvode", (request, response) -> {
             response.type("text/text");
             String kategorija = request.queryParams("kategorija");
@@ -90,42 +97,48 @@ public class Launcher {
             return gson.toJson(lista);
         });
 
+        // Uništavanje sesije
         get("/logout", (request, response) -> {
             request.session().removeAttribute("user");
             response.redirect("/");
             return null;
         }, new HandlebarsTemplateEngine());
 
+        // Sortiranje proizvoda
         get("/api/sortiraj", (request, response) -> {
-            response.type("text/text");
+//            response.type("text/text");
             String sortiranje = request.queryParams("sort");
-            ArrayList<Proizvod> list = Data.readFromJson(path);
+            ArrayList<Proizvod> list = new ArrayList<>();
+            for (Proizvod p : Data.readFromJson(path)) {
+                if(p.getVisible()) {
+                    list.add(p);
+                }
+            }
             for (int i = 0; i < list.size() - 1; i++) {
                 for (int j = i + 1; j < list.size(); j++) {
-                    // Switch -> case
                     switch (sortiranje) {
-                        case "1":
+                        case "1": // Sortiranje po ceni rastuće
                             if (list.get(i).getPrice() > list.get(j).getPrice()) {
                                 Proizvod tmp = list.get(i);
                                 list.set(i, list.get(j));
                                 list.set(j, tmp);
                             }
                              break;
-                        case "2":
+                        case "2": // sortiranje po ceni opadajuće
                             if (list.get(i).getPrice() < list.get(j).getPrice()) {
                                 Proizvod tmp = list.get(i);
                                 list.set(i, list.get(j));
                                 list.set(j, tmp);
                             }
                             break;
-                        case "3":
+                        case "3": // Abecedno A-Z
                             if (list.get(i).getName().compareTo(list.get(j).getName()) > 0) {
                                 Proizvod tmp = list.get(i);
                                 list.set(i, list.get(j));
                                 list.set(j, tmp);
                             }
                             break;
-                        case "4":
+                        case "4": // Abecedno Z-A
                             if (list.get(i).getName().compareTo(list.get(j).getName()) < 0) {
                                 Proizvod tmp = list.get(i);
                                 list.set(i, list.get(j));
@@ -139,6 +152,17 @@ public class Launcher {
             Gson gson = new Gson();
             return gson.toJson(list);
         });
+
+        // Učitavanje stranice za dodavanje proizvoda
+        get("/dodaj", (request, response) -> {
+            if (request.session().attribute("user") == null) {
+                response.redirect("/");
+                return null;
+            }
+            return new ModelAndView(null,"dodaj.hbs");
+        },new HandlebarsTemplateEngine());
+
+        // Dodavanje novog proizvoda
         post("/dodajProizvod", (request, response) -> {
             String naziv = request.queryParams("naziv");
             String cena = request.queryParams("cena");
@@ -147,20 +171,20 @@ public class Launcher {
             String[] procesor = request.queryParams("procesor").split(",");
             String[] memorija = request.queryParams("memorija").split(",");
             String poruka = "";
-            Boolean provera = true;
+            boolean provera = true;
             ArrayList<Proizvod> lista = Data.readFromJson(path);
             Proizvod p = new Proizvod(Data.readFromJson(path).size() + 1, Double.parseDouble(cena), naziv, url, ekran[0], procesor[0], ekran[1], procesor[1], memorija[0], memorija[1]);
             if (lista.size() > 0) {
                 for (int i = 0; i < lista.size(); i++) {
                     if (lista.get(i).getName().equals(naziv)) {
-                            provera = true;
-                            break;
+                        provera = true;
+                        break;
                     } else {
-                            if (i == (lista.size() - 1)) {
-                                    lista.add(p);
-                                    provera = false;
-                                    break;
-                            }
+                        if (i == (lista.size() - 1)) {
+                            lista.add(p);
+                            provera = false;
+                            break;
+                        }
                     }
                 }
             } else {
@@ -177,26 +201,13 @@ public class Launcher {
             Data.writeToJSON(lista, path);
             return new ModelAndView(polja, "dodaj.hbs");
         }, new HandlebarsTemplateEngine());
-//
-//        get("/api/obrada", (request, response) -> {
-//            response.type("text/text");
-//            String filter = request.queryParams("value");
-//            ArrayList<Proizvod> proizvodi = Data.readFromJson(path);
-//            ArrayList<Proizvod> list = new ArrayList<>();
-//            for (Proizvod p : proizvodi) {
-//                if (p.getCpu().contains(filter)) {
-//                    list.add(p);
-//                }
-//            }
-//            Gson gson = new Gson();
-//            return gson.toJson(list);
-//        });
 
-        get("/dodaj", (request, response) -> {
-            return new ModelAndView(null, "dodaj.hbs");
-        }, new HandlebarsTemplateEngine());
-
+        // Pronalazak proizvoda za izmenu
         get("/izmeni/:id", (request, response) -> {
+            if (request.session().attribute("user") == null) {
+                response.redirect("/");
+                return null;
+            }
             int id = Integer.parseInt(request.params("id"));
             for (Proizvod p : Data.readFromJson(path)) {
                 if (p.getId() == id) {
@@ -207,6 +218,7 @@ public class Launcher {
             return new ModelAndView(polja, "izmeni.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Čuvanje izmena
         post("/izmeniProizvod", (request, response) -> {
             int id = Integer.parseInt(request.queryParams("id"));
             String naziv = request.queryParams("naziv");
@@ -233,9 +245,9 @@ public class Launcher {
 
             Data.writeToJSON(lista, path);
             return new ModelAndView(polja, "izmeni.hbs");
-
         }, new HandlebarsTemplateEngine());
 
+        // Brisanje proizvoda
         get("/obrisi", (request, response) -> {
             response.type("text/text");
             int id = Integer.parseInt(request.queryParams("id"));
@@ -244,22 +256,31 @@ public class Launcher {
             for (int i = 0; i < lista.size(); i++) {
                 if (lista.get(i).getId() == id) {
                     lista.remove(i);
-                    poruka = "uspesno obrisan proizvod";
+                    poruka = "Uspešno obrisan proizvod";
                     Data.writeToJSON(lista, path);
+                    break;
                 } else {
-                    poruka = "proizvod nije obrisan";
+                    poruka = "Proizvod nije obrisan";
                 }
             }
-            System.out.println(lista.size());
-
             return poruka;
         });
 
+        // Učitavanje stranice za dodavanje kategorije
         get("/dodajKategoriju", (request, response) -> {
+            if (request.session().attribute("user") == null) {
+                response.redirect("/");
+                return null;
+            }
             return new ModelAndView(null, "dodajKategoriju.hbs");
-        }, new HandlebarsTemplateEngine());
+        },new HandlebarsTemplateEngine());
 
+        // Dodavanje nove kategorije
         post("/dodajKat", (request, response) -> {
+            if (request.session().attribute("user") == null) {
+                response.redirect("/");
+                return null;
+            }
             String naziv = request.queryParams("naziv").toUpperCase();
             ArrayList<Kategorija> kategorije = Data2.readFromJson("kategorije.json");
             Kategorija k = new Kategorija(kategorije.size() + 1, naziv);
@@ -280,11 +301,12 @@ public class Launcher {
             return new ModelAndView(null, "dodajKategoriju.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Brisanje kategorije
         get("/izbrisiKategoriju", (request, response) -> {
             String kat = request.queryParams("kategorija");
             String poruka = "";
             ArrayList<Kategorija> kategorije = Data2.readFromJson("kategorije.json");
-            Boolean provera = false;
+            boolean provera = false;
             for (Proizvod p : Data.readFromJson(path)) {
                 String kategorijaProizvoda = p.getName().split(" ")[0].toUpperCase();
                 if (kategorijaProizvoda.equals(kat)) {
@@ -306,16 +328,15 @@ public class Launcher {
             return poruka;
         });
 
+        // Promena vidljivosti proizvoda
         post("/promeniVidljivost",(request, response) -> {
             response.type("text/text");
             Boolean vidljivost = Boolean.parseBoolean(request.queryParams("visible"));
             int id = Integer.parseInt(request.queryParams("id"));
             ArrayList<Proizvod> proizvodi = Data.readFromJson(path);
-            System.out.println(vidljivost);
             for (Proizvod p : proizvodi) {
                 if(p.getId() == id) {
                     p.setVisible(vidljivost);
-                    System.out.println(vidljivost);
                     break;
                 }
             }
@@ -323,7 +344,7 @@ public class Launcher {
             return "Uspesno izmenjena vidjivost";
         });
 
-        ArrayList<Proizvod> korpa = new ArrayList<>();
+       // Dodavanje proizvoda u kategoriju
         post("/dodajKorpu",(request, response) -> {
             int id = Integer.parseInt(request.queryParams("id"));
             String poruka = "";
@@ -334,15 +355,16 @@ public class Launcher {
                     break;
                 }
             }
-            System.out.println(korpa);
             return poruka;
         });
 
+        // Učitavanje korpe
         get("/korpa", (request, response) -> {
             polja.put("korpa",korpa);
             return new ModelAndView(polja,"korpa.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Brisanje proizvoda iz korpe
         post("/izbaciProizvod", (request, response) -> {
             int id = Integer.parseInt(request.queryParams("id"));
             for (int i = 0;i< korpa.size();i++) {

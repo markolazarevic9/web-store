@@ -6,8 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://kit.fontawesome.com/486587c22a.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="http://127.0.0.1:5000/css/style.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5000/css/bootstrap/bootstrap.min.css">
     <title>Admin panel</title>
 
     <style>
@@ -25,7 +25,7 @@
 
     <h2>Admin panel</h2>
 
-    <select  id="kategorije">
+    <select id="kategorije">
         <option  name="kategorija" value="0">---Izaberite kategoriju---</option>
         {{#each kategorije}}
             <option name="kategorija" value="{{this}}">{{this}}</option>
@@ -62,7 +62,7 @@
                        <th scope="row">{{this.screenSize}} {{this.screenResolution}}</th>
                        <th scope="row">{{this.cpu}} {{this.numberOfCores}} jezgra</th>
                        <th scope="row">{{this.memory}} {{this.ram}}</th>
-                       <th scope="row">Visible <input type="checkbox" onclick="vidljivost(this)" data-id="{{this.id}}" {{#if this.visible}}checked{{/if}}></th>
+                       <th class="text-center" scope="row"><input type="checkbox" onclick="vidljivost(this)" data-id="{{this.id}}" {{#if this.visible}}checked{{/if}}></th>
                        <th scope="row"> <button class="btn-primary"><a  href="/izmeni/{{this.id}}">Izmeni</a></button></th>
                        <th scope="row"><button class="btn-outline-danger" value="{{this.id}}" onclick="obrisi(this)" id="obrisi">Obrisi</button></th>
                    </tr>
@@ -71,6 +71,7 @@
         </table>
     <script src="http://127.0.0.1:5000/js/jquery-3.3.1.min.js"></script>
     <script>
+        // prikaz podataka
         function prikazPodataka(lista) {
             let tabela = document.querySelector("#table");
             tabela.innerHTML="";
@@ -83,7 +84,7 @@
                 <td>${proizvod.screenSize} ${proizvod.screenResolution}</td>
                 <td>${proizvod.cpu} ${proizvod.numberOfCores} jezgra</td>
                 <td>${proizvod.memory} ${proizvod.ram}</td>
-                <td>Visible <input type="checkbox" onchange="vidljivost(this)" data-id="${proizvod.id}" checked="${proizvod.visible}"></td>
+                <td class="text-center"><input type="checkbox" onchange="vidljivost(this)" data-id="${proizvod.id}" checked="${proizvod.visible}"></td>
                 <td> <button class="btn-primary"><a href="/izmeni/${proizvod.id}">Izmeni</a></button></td>
                 <th scope="row"><button class="btn-outline-danger" value="${proizvod.id}" onclick="obrisi(this)" id="obrisi">Obrisi</button></th>
                 </tr>`
@@ -92,8 +93,7 @@
 
         }
 
-
-        // ako je intel cekiran -> u data njegovu vrednost
+        // Dohvatanje proizvoda po kategoriji
         document.querySelector("#kategorije").onchange = function () {
             let kategorije = document.querySelector("#kategorije");
             $.ajax({
@@ -109,9 +109,9 @@
             })
         }
 
+        // Brisanje proizvoda
         function obrisi(btn) {
-
-            if(confirm("Da li zelite da obrisete proizvod") == true) {
+            if(confirm("Da li zelite da obrisete proizvod")) {
                 $.ajax({
                     url:"/obrisi",
                     method: "get",
@@ -126,6 +126,7 @@
             }
         }
 
+        // Brisanje kategorije
         function izbrisiKategoriju() {
             let kategorije = document.querySelector("#kategorije");
             $.ajax({
@@ -141,6 +142,7 @@
             })
         }
 
+        // Promena vidljivosti
         function vidljivost(el) {
             $.ajax({
                 url: "/promeniVidljivost",
@@ -155,7 +157,5 @@
             })
         }
     </script>
-
-
 </body>
 </html>

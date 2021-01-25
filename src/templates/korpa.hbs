@@ -6,11 +6,13 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="http://127.0.0.1:5000/css/bootstrap/bootstrap.css">
+    <script src="https://kit.fontawesome.com/486587c22a.js" crossorigin="anonymous"></script>
 
     <title>Korpa</title>
 </head>
 <body>
-    <h1 class="text-center">Korpa</h1>
+    <h1 class="text-center"><i class="fas fa-shopping-cart"></i> Korpa</h1>
+    <hr>
     {{#if korpa}}
         <table class="table">
             <thead>
@@ -32,27 +34,28 @@
             </tr>
         {{/each}}
     {{else}}
-        <h2>U korpi nema proizvoda</h2>
+        <h2 class="text-center mt-5">U KORPI NEMA PROIZVODA</h2>
     {{/if}}
         </tbody>
     </table>
 
 
-    <div class="prikaz"></div>
+    <div class="prikaz text-center"></div>
     <script src="http://127.0.0.1:5000/js/jquery-3.3.1.min.js"> </script>
     <script>
+        // Prikaz i racunanje cene
         let div = document.querySelector(".prikaz");
         let cene = document.getElementsByClassName("cene");
-        console.log(cene);
         let racun  = 0;
-        for (const cena of cene) {
-            racun += parseFloat(cena.innerText);
+        if(cene.length > 0) {
+            for (const cena of cene) {
+                racun += parseFloat(cena.innerText);
+            }
+            div.innerHTML += `<h3>Vaš račun iznosi ${racun} RSD </h3>`
         }
-        div.innerHTML += `<h3>Vaš račun iznosi ${racun} RSD </h3>`
-        console.log(racun);
 
+        // Brisanje proizvoda iz korpe
         function izbaciProizvod(el) {
-            console.log(el);
             $.ajax({
                 url:"/izbaciProizvod",
                 method:"post",

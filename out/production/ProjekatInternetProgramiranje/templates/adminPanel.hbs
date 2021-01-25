@@ -62,7 +62,7 @@
                        <th scope="row">{{this.screenSize}} {{this.screenResolution}}</th>
                        <th scope="row">{{this.cpu}} {{this.numberOfCores}} jezgra</th>
                        <th scope="row">{{this.memory}} {{this.ram}}</th>
-                       <th scope="row">Visible <input type="checkbox" onclick="vidljivost(this)" data-id="{{this.id}}" {{#if this.visible}}checked{{/if}}></th>
+                       <th class="text-center" scope="row"><input type="checkbox" onclick="vidljivost(this)" data-id="{{this.id}}" {{#if this.visible}}checked{{/if}}></th>
                        <th scope="row"> <button class="btn-primary"><a  href="/izmeni/{{this.id}}">Izmeni</a></button></th>
                        <th scope="row"><button class="btn-outline-danger" value="{{this.id}}" onclick="obrisi(this)" id="obrisi">Obrisi</button></th>
                    </tr>
@@ -83,7 +83,7 @@
                 <td>${proizvod.screenSize} ${proizvod.screenResolution}</td>
                 <td>${proizvod.cpu} ${proizvod.numberOfCores} jezgra</td>
                 <td>${proizvod.memory} ${proizvod.ram}</td>
-                <td>Visible <input type="checkbox" onchange="vidljivost(this)" data-id="${proizvod.id}" checked="${proizvod.visible}"></td>
+                <td class="text-center"><input type="checkbox" onchange="vidljivost(this)" data-id="${proizvod.id}" checked="${proizvod.visible}"></td>
                 <td> <button class="btn-primary"><a href="/izmeni/${proizvod.id}">Izmeni</a></button></td>
                 <th scope="row"><button class="btn-outline-danger" value="${proizvod.id}" onclick="obrisi(this)" id="obrisi">Obrisi</button></th>
                 </tr>`
@@ -92,8 +92,6 @@
 
         }
 
-
-        // ako je intel cekiran -> u data njegovu vrednost
         document.querySelector("#kategorije").onchange = function () {
             let kategorije = document.querySelector("#kategorije");
             $.ajax({

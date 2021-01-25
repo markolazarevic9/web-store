@@ -4,14 +4,11 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/486587c22a.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="http://127.0.0.1:5000/css/style.css">
     <link rel="stylesheet" href="http://127.0.0.1:5000/css/bootstrap/bootstrap.min.css">
-
-
 
     <title>PC Shop</title>
 </head>
@@ -44,16 +41,13 @@
                     <option  name="sort" value="null">--Sortiraj--</option>
                     <option  name="sort" value="1">Ceni rastuće</option>
                     <option  name="sort" value="2">Ceni opadajuće</option>
-                    <option  name="sort" value="3"><Ab></Ab>ecedno A-Z</option>
+                    <option  name="sort" value="3"><Ab></Ab>Abecedno A-Z</option>
                     <option  name="sort" value="4">Abecedno Z-A</option>
                 </select>
             </li>
         </ul>
-
         <a class="nav-link" href="/korpa"><i class="fas fa-shopping-cart"></i> Korpa</a>
         <a class="nav-link" href="/loginForm"><i class="fas fa-sign-in-alt"></i> Log in</a>
-
-
     </div>
 </nav>
 <form action="/pretraga" method="get" class="form-inline float-right">
@@ -80,7 +74,6 @@
                             <p>Broj jezgara: {{this.numberOfCores}}</p>
                             <p>Memorija: {{this.memory}}</p>
                             <p>RAM: {{this.ram}}</p>
-                            <p>Graficka: {{this.gpu}}</p>
                             <p>Dijagonla: {{this.screenSize}}</p>
                             <p>Rezolucija: {{this.screenResolution}}</p>
                         </div>
@@ -114,7 +107,6 @@
                             <p>Broj jezgara: ${proizvod.numberOfCores}</p>
                             <p>Memorija: ${proizvod.memory}</p>
                             <p>RAM: ${proizvod.ram}</p>
-                            <p>Graficka: ${proizvod.gpu}</p>
                             <p>Dijagonla: ${proizvod.screenSize}</p>
                             <p>Rezolucija: ${proizvod.screenResolution}</p>
                         </div>
