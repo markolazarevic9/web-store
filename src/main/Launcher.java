@@ -315,6 +315,7 @@ public class Launcher {
                     break;
                 }
             }
+            // Ako kategorija nema proizvoda
             if (!provera) {
                 for (Kategorija k : kategorije) {
                     if (kat.equals(k.getNaziv())) {
